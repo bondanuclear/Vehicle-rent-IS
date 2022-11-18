@@ -660,7 +660,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1492201618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -668,7 +668,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1492201617}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13162f5dc5568f64a95add966a2509f8, type: 3}
   m_Name: 
@@ -696,12 +696,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1492201617}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d9ad2744ed912e47b1e142448462b0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   addUserButton: {fileID: 792333551}
+  submitButton: {fileID: 0}
+  nameInput: {fileID: 0}
+  surnameInput: {fileID: 0}
+  phoneInput: {fileID: 0}
+  warningText: {fileID: 0}
 --- !u!1 &1622226775
 GameObject:
   m_ObjectHideFlags: 0

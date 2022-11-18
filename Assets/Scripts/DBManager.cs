@@ -20,7 +20,7 @@ public class DBManager : MonoBehaviour
         IDbConnection dbConnection = CreateAndOpenDatabase();
         IDbCommand  command = dbConnection.CreateCommand();
         //SqliteCommand insertSQL = new SqliteCommand("INSERT INTO Clients (clientID, Firstname, Surname, PhoneNumber) VALUES (35, 'ss', 'sss', '380994455')");
-        command.CommandText = $"INSERT INTO Clients(clientID, FirstName, Surname, PhoneNumber, VehicleID) VALUES ({client.clientID},'{client.firstName}' , '{client.surname}', '{client.phoneNumber}', {client.VehicleID})";
+        command.CommandText = $"INSERT INTO Clients(FirstName, Surname, PhoneNumber, VehicleID) VALUES ('{client.firstName}' , '{client.surname}', '{client.phoneNumber}', {client.VehicleID})";
         //"INSERT OR REPLACE INTO HitCountTableSimple (id, hits) VALUES (0, " + hitCount + ")"; // 10
         // command.Parameters.Add('3');
         // command.Parameters.Add(client.firstName);
@@ -42,12 +42,15 @@ public class DBManager : MonoBehaviour
          // 4
         IDbConnection dbConnection = new SqliteConnection(IS_DB); // 5
         dbConnection.Open(); // 6
-
         // Create a table for the hit count in the database if it does not exist yet.
         // IDbCommand dbCommandCreateTable = dbConnection.CreateCommand(); // 6
         // dbCommandCreateTable.CommandText = "CREATE TABLE IF NOT EXISTS ClientsTableSimple (clientID INTEGER PRIMARY KEY, Firstname TEXT, Surname TEXT, PhoneNumber TEXT )"; // 7
         // dbCommandCreateTable.ExecuteReader(); // 8
-
         return dbConnection;
+    }
+    public void FillListWithData(out Dictionary<int, Vehicle> dict)
+    {
+        dict = new Dictionary<int, Vehicle>();
+        
     }
 }

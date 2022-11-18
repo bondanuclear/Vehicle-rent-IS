@@ -9,7 +9,7 @@ public class Client
     public string surname {get; private set;}
     public string phoneNumber { get; private set; }
     public int VehicleID {get; private set;}
-    public Client(int clientID, string firstName, string surname, string phoneNumber, int VehicleID)
+    public Client(string firstName, string surname, string phoneNumber, int VehicleID, int clientID = 0)
     {
         this.clientID = clientID;
         this.firstName = firstName;
