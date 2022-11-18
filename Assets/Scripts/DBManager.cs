@@ -7,20 +7,20 @@ using System;
 
 public class DBManager : MonoBehaviour
 {
-    [SerializeField] string IS_DB = "URI=file:InformationSystem.sqlite";
+    [SerializeField] string IS_DB = "URI=file:Clients.sqlite";
     // Start is called before the first frame update
     void Start()
     {
         
-        // IDbConnection dbConnection = CreateAndOpenDatabase();
-        // dbConnection.Close();
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        dbConnection.Close();
     }
     public void AddUserToTable(Client client)
     {
         IDbConnection dbConnection = CreateAndOpenDatabase();
         IDbCommand  command = dbConnection.CreateCommand();
         //SqliteCommand insertSQL = new SqliteCommand("INSERT INTO Clients (clientID, Firstname, Surname, PhoneNumber) VALUES (35, 'ss', 'sss', '380994455')");
-        command.CommandText = $"INSERT INTO Clients(clientID, FirstName, Surname, PhoneNumber) VALUES ({client.clientID},'{client.firstName}' , '{client.surname}', '{client.phoneNumber}')";
+        command.CommandText = $"INSERT INTO Clients(clientID, FirstName, Surname, PhoneNumber, VehicleID) VALUES ({client.clientID},'{client.firstName}' , '{client.surname}', '{client.phoneNumber}', {client.VehicleID})";
         //"INSERT OR REPLACE INTO HitCountTableSimple (id, hits) VALUES (0, " + hitCount + ")"; // 10
         // command.Parameters.Add('3');
         // command.Parameters.Add(client.firstName);

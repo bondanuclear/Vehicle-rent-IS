@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
     }
     public void AddUser()
     {
-        Client client = new Client(36,"Krake", "Ler", "34511233");
+        Vehicle monowheel = new Vehicle(0, "Monowheel", 100, "Electro", 20f, 3);
+        Client client = new Client(5,"Qwer", "Tyui", "123456789", monowheel.vehicleID);
         dBManager.AddUserToTable(client);
     }
     // Update is called once per frame
