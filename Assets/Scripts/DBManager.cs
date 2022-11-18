@@ -12,8 +12,8 @@ public class DBManager : MonoBehaviour
     void Start()
     {
         
-        IDbConnection dbConnection = CreateAndOpenDatabase();
-        dbConnection.Close();
+        // IDbConnection dbConnection = CreateAndOpenDatabase();
+        // dbConnection.Close();
     }
     public void AddUserToTable(Client client)
     {
@@ -51,6 +51,26 @@ public class DBManager : MonoBehaviour
     public void FillListWithData(out Dictionary<int, Vehicle> dict)
     {
         dict = new Dictionary<int, Vehicle>();
-        
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
+        dbCommandReadValues.CommandText = "SELECT * FROM Vehicles";
+        IDataReader dataReader = dbCommandReadValues.ExecuteReader();
+        while (dataReader.Read())
+        {
+            var id = dataReader.GetInt32(0);
+            //Debug.Log(id + " ID ");
+            var name = dataReader.GetString(1);
+            //Debug.Log(name + " NAME ");
+            var price = dataReader.GetInt32(2);
+           // Debug.Log(price + "PRICE PER HOUR");
+            var type = dataReader.GetString(3);
+            //Debug.Log(type + "TYPE");
+            var maxSpeed = dataReader.GetFloat(4);
+            //Debug.Log(maxSpeed + "MAX SPEED");
+            var amount = dataReader.GetInt32(5);
+            //Debug.Log(amount + " AMOUNT ");
+            Vehicle vehicle = new Vehicle(id, name, price, type, maxSpeed, amount);
+            dict.Add(id, vehicle);
+        }
     }
 }

@@ -9,21 +9,36 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] Button addUserButton;
     [SerializeField] Button submitButton;
+    [SerializeField] Button chooseVehicle;
     [SerializeField] TMP_InputField nameInput;
     [SerializeField] TMP_InputField surnameInput;
     [SerializeField] TMP_InputField phoneInput;
     [SerializeField] TextMeshProUGUI warningText;
     DBManager dBManager;
+    [Header("Vehicle Panel")]
+    [SerializeField] GameObject panel = null;
+    [SerializeField] GameObject parent = null;
+    Dictionary<int, Vehicle> vehiclesInfo;
+    int? vehicleId = null;
     // Start is called before the first frame update
     void Awake()
     {
         dBManager = GetComponent<DBManager>();
     }
- 
+    private void Start() {
+        
+        dBManager.FillListWithData(out vehiclesInfo);
+        Debug.Log(vehiclesInfo.Count);
+        SpawnPanels();
+    }
     private void OnEnable() {
         //addUserButton.onClick.AddListener(AddUser);
         submitButton.onClick.AddListener(RegisterUser);
+        //chooseVehicle.onClick.AddListener(ChooseVehicle);
     }
+
+    
+
     public void RegisterUser()
     {
         if(nameInput.text == "" || surnameInput.text == "" || phoneInput.text == "") 
@@ -33,8 +48,8 @@ public class GameManager : MonoBehaviour
             return;
         }
         
-        Vehicle monowheel = new Vehicle(0, "Monowheel", 100, "Electro", 20f, 3);
-        Client client = new Client(nameInput.text, surnameInput.text, phoneInput.text, monowheel.vehicleID);
+        //Vehicle monowheel = new Vehicle(0, "Monowheel", 100, "Electro", 20f, 3);
+        Client client = new Client(nameInput.text, surnameInput.text, phoneInput.text, 0);
         dBManager.AddUserToTable(client);
 
 
@@ -68,8 +83,25 @@ public class GameManager : MonoBehaviour
     //     dBManager.AddUserToTable(client);
     // }
     // Update is called once per frame
-    void Update()
+    void SpawnPanels()
     {
-        
+        int index = 0;
+        if(vehiclesInfo == null) return;
+        foreach(var item in vehiclesInfo)
+        {
+            GameObject spawnedObject  = Instantiate(panel, parent.transform);
+            spawnedObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.Value.vehicleName;
+            spawnedObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.Value.pricePerHour.ToString() + " UAH/HOUR";
+            spawnedObject.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.Value.type;
+            Debug.Log(spawnedObject.name);
+            spawnedObject.GetComponent<Button>().onClick.AddListener(delegate{ChooseVehicle(index);});
+            index++;
+            
+        }
     }
+    public void ChooseVehicle(int i)
+    {
+        Debug.Log("Button clicked = " + i);
+    }
+    
 }
