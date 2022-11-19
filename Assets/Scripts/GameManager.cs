@@ -8,63 +8,78 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    // [Header("Vehicle Panel")]
+    // [SerializeField] GameObject panel = null;
+    // [SerializeField] GameObject parent = null;
+    // [SerializeField] TextMeshProUGUI chosenVehicleText = null;
+    
+    // Dictionary<int, Vehicle> vehiclesInfo;
+    // public int? vehicleId {get; private set;} = null;
+    [SerializeField] Button choose;
+    [SerializeField] Button returnToVehicles;
     DBManager dBManager;
-    [Header("Vehicle Panel")]
-    [SerializeField] GameObject panel = null;
-    [SerializeField] GameObject parent = null;
-    Dictionary<int, Vehicle> vehiclesInfo;
-    int? vehicleId = null;
-    [SerializeField] TextMeshProUGUI chosenVehicleText = null;
-    // Start is called before the first frame update
+    RegisterForm registerForm;
+    VehicleForm vehicleForm;
     void Awake()
     {
-        dBManager = GetComponent<DBManager>();
+        //dBManager = GetComponent<DBManager>();
+        vehicleForm = GetComponent<VehicleForm>();
+        registerForm = GetComponent<RegisterForm>();
     }
-    private void Start() {
+    private void OnEnable() {
         
-        dBManager.FillListWithData(out vehiclesInfo);
-        Debug.Log(vehiclesInfo.Count);
-        SpawnPanels();
-        chosenVehicleText.text = "";
+        choose.onClick.AddListener(ShowRegistrationForm);
+        returnToVehicles.onClick.AddListener(CloseRegistration);
     } 
+    public void ShowRegistrationForm()
+    {
+        bool shouldHide = registerForm.ActivateRegForm();
+        choose.gameObject.SetActive(!shouldHide);
+    }
+    public void CloseRegistration()
+    {
+        registerForm.DeactivateRegForm();
+        choose.gameObject.SetActive(true);
+    }
+// to do: if a person
     // public void AddUser()
     // {
     //     Client client = new Client(5, "aaa", "ddd", "178489", 430);
     //     dBManager.AddUserToTable(client);
     // }
     // Update is called once per frame
-    void SpawnPanels()
-    {
+    // void SpawnPanels()
+    // {
         
-        if(vehiclesInfo == null) return;
+    //     if(vehiclesInfo == null) return;
 
-        foreach(var item in vehiclesInfo)
-        {
+    //     foreach(var item in vehiclesInfo)
+    //     {
             
-            GameObject spawnedObject  = Instantiate(panel, parent.transform);
-            spawnedObject.name = item.Key.ToString() + "Vehicle";
-            spawnedObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.Value.vehicleName;
-            spawnedObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.Value.pricePerHour.ToString() + " UAH/HOUR";
-            spawnedObject.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.Value.type;
-            // Debug.Log(spawnedObject.name);
-            // Debug.Log(item.Key + " VEHICLE ID ");
-            spawnedObject.GetComponent<Button>().onClick.AddListener(delegate{ChooseVehicle(item.Key);});
+    //         GameObject spawnedObject  = Instantiate(panel, parent.transform);
+    //         spawnedObject.name = item.Key.ToString() + "Vehicle";
+    //         spawnedObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.Value.vehicleName;
+    //         spawnedObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.Value.pricePerHour.ToString() + " UAH/HOUR";
+    //         spawnedObject.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.Value.type;
+    //         // Debug.Log(spawnedObject.name);
+    //         // Debug.Log(item.Key + " VEHICLE ID ");
+    //         spawnedObject.GetComponent<Button>().onClick.AddListener(delegate{ChooseVehicle(item.Key);});
             
             
-        }
-    }
-    public void ChooseVehicle(int vehicleId)
-    {
-        Debug.Log("Button clicked = " + vehicleId);
-        this.vehicleId = vehicleId;
-        Debug.Log(this.vehicleId);
-        Vehicle vehicle;
-        vehiclesInfo.TryGetValue(vehicleId, out vehicle);
-        chosenVehicleText.text = $" {vehicle.vehicleName} ";
-    }
-    public void Return()
-    {
-        this.vehicleId = null;
-        chosenVehicleText.text = "";
-    }
+    //     }
+    // }
+    // public void ChooseVehicle(int vehicleId)
+    // {
+    //     //Debug.Log("Button clicked = " + vehicleId);
+    //     //Debug.Log(this.vehicleId);
+    //     this.vehicleId = vehicleId;
+    //     Vehicle vehicle;
+    //     vehiclesInfo.TryGetValue(this.vehicleId.Value, out vehicle);
+    //     chosenVehicleText.text = $" {vehicle.vehicleName} ";
+    // }
+    // public void Return()
+    // {
+    //     this.vehicleId = null;
+    //     chosenVehicleText.text = "";
+    // }
 }

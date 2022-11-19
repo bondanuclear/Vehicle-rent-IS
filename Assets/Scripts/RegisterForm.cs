@@ -6,24 +6,26 @@ using UnityEngine.UI;
 
 public class RegisterForm : MonoBehaviour
 {
+    [SerializeField] GameObject parentRegisterPanel = null;
     [SerializeField] TMP_InputField nameInput;
     [SerializeField] TMP_InputField surnameInput;
     [SerializeField] TMP_InputField phoneInput;
     [SerializeField] TextMeshProUGUI warningText;
+    [Header("To change the header:")]
+    [SerializeField] GameObject RFheader = null;
+    [SerializeField] GameObject VFheader = null;
     DBManager dBManager;
+    VehicleForm vehicleForm;
     [SerializeField] Button submitButton; 
-    RegisterForm registerForm;
+    
     private void Awake() {
-        dBManager = GetComponent<DBManager>();
-        registerForm = GetComponent<RegisterForm>();
+        dBManager = GetComponent<DBManager>();  
+        vehicleForm = GetComponent<VehicleForm>();
     }
    
-
     private void OnEnable()
     {
-        //addUserButton.onClick.AddListener(AddUser);
-        submitButton.onClick.AddListener(RegisterUser);
-        //chooseVehicle.onClick.AddListener(ChooseVehicle);
+        submitButton.onClick.AddListener(RegisterUser);   
     }
 
 
@@ -38,7 +40,7 @@ public class RegisterForm : MonoBehaviour
         }
 
         //Vehicle monowheel = new Vehicle(0, "Monowheel", 100, "Electro", 20f, 3);
-        Client client = new Client(nameInput.text, surnameInput.text, phoneInput.text, 0);
+        Client client = new Client(nameInput.text, surnameInput.text, phoneInput.text, vehicleForm.vehicleId.Value);
         dBManager.AddUserToTable(client);
 
 
@@ -65,5 +67,28 @@ public class RegisterForm : MonoBehaviour
         warningText.gameObject.SetActive(false);
         submitButton.GetComponent<Button>().enabled = true;
 
+    }
+    public bool ActivateRegForm()
+    {
+        if(vehicleForm.vehicleId == null) 
+        {
+            Debug.LogWarning("WARNING, YOU HAVE NOT CHOSEN ANYTHING YET");  
+            return false; 
+        }
+        else
+        {
+            parentRegisterPanel.SetActive(true);
+            vehicleForm.parent.SetActive(false);
+            VFheader.SetActive(false);
+            RFheader.SetActive(true);
+        } 
+        return true;
+    }
+    public void DeactivateRegForm()
+    {
+        parentRegisterPanel.SetActive(false);
+        vehicleForm.parent.SetActive(true);
+        VFheader.SetActive(true);
+        RFheader.SetActive(false);
     }
 }
