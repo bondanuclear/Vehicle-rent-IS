@@ -85,23 +85,28 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void SpawnPanels()
     {
-        int index = 0;
+        
         if(vehiclesInfo == null) return;
+
         foreach(var item in vehiclesInfo)
         {
+            
             GameObject spawnedObject  = Instantiate(panel, parent.transform);
+            spawnedObject.name = item.Key.ToString() + "Vehicle";
             spawnedObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.Value.vehicleName;
             spawnedObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.Value.pricePerHour.ToString() + " UAH/HOUR";
             spawnedObject.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.Value.type;
-            Debug.Log(spawnedObject.name);
-            spawnedObject.GetComponent<Button>().onClick.AddListener(delegate{ChooseVehicle(index);});
-            index++;
+            // Debug.Log(spawnedObject.name);
+            // Debug.Log(item.Key + " VEHICLE ID ");
+            spawnedObject.GetComponent<Button>().onClick.AddListener(delegate{ChooseVehicle(item.Key);});
+            
             
         }
     }
-    public void ChooseVehicle(int i)
+    public void ChooseVehicle(int vehicleId)
     {
-        Debug.Log("Button clicked = " + i);
+        Debug.Log("Button clicked = " + vehicleId);
+        this.vehicleId = vehicleId;
     }
     
 }
