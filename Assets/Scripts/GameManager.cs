@@ -1,25 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] Button addUserButton;
-    [SerializeField] Button submitButton;
-    [SerializeField] Button chooseVehicle;
-    [SerializeField] TMP_InputField nameInput;
-    [SerializeField] TMP_InputField surnameInput;
-    [SerializeField] TMP_InputField phoneInput;
-    [SerializeField] TextMeshProUGUI warningText;
     DBManager dBManager;
     [Header("Vehicle Panel")]
     [SerializeField] GameObject panel = null;
     [SerializeField] GameObject parent = null;
     Dictionary<int, Vehicle> vehiclesInfo;
     int? vehicleId = null;
+    [SerializeField] TextMeshProUGUI chosenVehicleText = null;
     // Start is called before the first frame update
     void Awake()
     {
@@ -30,53 +25,8 @@ public class GameManager : MonoBehaviour
         dBManager.FillListWithData(out vehiclesInfo);
         Debug.Log(vehiclesInfo.Count);
         SpawnPanels();
-    }
-    private void OnEnable() {
-        //addUserButton.onClick.AddListener(AddUser);
-        submitButton.onClick.AddListener(RegisterUser);
-        //chooseVehicle.onClick.AddListener(ChooseVehicle);
-    }
-
-    
-
-    public void RegisterUser()
-    {
-        if(nameInput.text == "" || surnameInput.text == "" || phoneInput.text == "") 
-        {
-            Debug.LogWarning("name is Empty"); 
-            StartCoroutine(Warning());
-            return;
-        }
-        
-        //Vehicle monowheel = new Vehicle(0, "Monowheel", 100, "Electro", 20f, 3);
-        Client client = new Client(nameInput.text, surnameInput.text, phoneInput.text, 0);
-        dBManager.AddUserToTable(client);
-
-
-        ClearInputFields();
-        //Debug.Log(client.firstName  +  "  " + client.surname + "  " + client.phoneNumber);
-    }
-
-    private void ClearInputFields()
-    {
-        nameInput.text = "";
-        surnameInput.text = "";
-        phoneInput.text = "";
-    }
-
-    IEnumerator Warning()
-    {
-        if(!warningText.gameObject.activeSelf)
-        {
-            warningText.gameObject.SetActive(true);
-            submitButton.GetComponent<Button>().enabled = false;
-        }
-            
-        yield return new WaitForSeconds(2f);
-        warningText.gameObject.SetActive(false);
-        submitButton.GetComponent<Button>().enabled = true;
-
-    }
+        chosenVehicleText.text = "";
+    } 
     // public void AddUser()
     // {
     //     Client client = new Client(5, "aaa", "ddd", "178489", 430);
@@ -107,6 +57,14 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Button clicked = " + vehicleId);
         this.vehicleId = vehicleId;
+        Debug.Log(this.vehicleId);
+        Vehicle vehicle;
+        vehiclesInfo.TryGetValue(vehicleId, out vehicle);
+        chosenVehicleText.text = $" {vehicle.vehicleName} ";
     }
-    
+    public void Return()
+    {
+        this.vehicleId = null;
+        chosenVehicleText.text = "";
+    }
 }
