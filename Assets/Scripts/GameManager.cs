@@ -34,16 +34,16 @@ public class GameManager : MonoBehaviour
         registerForm.DeactivateRegForm();
         choose.gameObject.SetActive(true);
     }
-// to do: if a person puts the same number inside the input field: track the exception
+//?? to do: if a person puts the same number inside the input field: track the exception
 // and alert the user.
-// to do: add "Amount" of vehicles to UI. Amount -= 1 after person rents it.
-// to do: if the amount of a certain vehicle is <= 0 then disable the ability to rent it.
-// if a person returns a vehicle then amount of this vehicles += 1
+//++ to do: add "Amount" of vehicles to UI. Amount -= 1 after person rents it.
+//++ to do: if the amount of a certain vehicle is <= 0 then disable the ability to rent it.
+//?- if a person returns a vehicle then amount of this vehicles += 1
 // to do: manager scene, ability to track the statistics of rented vehicles
 // to do: new table with income (рухи в лекціях): data vehicle hours fullPrice 
 // conclusion: month vehicle allHours sumPrice - conclusion after each month
 // 
-// update DBManager : ability to update fields. ability to find by id or sth else;
+//+- update DBManager : +ability to update fields. ability to find by id or sth else;
     // public void AddUser()
     // {
     //     Client client = new Client(5, "aaa", "ddd", "178489", 430);

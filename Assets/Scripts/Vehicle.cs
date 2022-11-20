@@ -19,5 +19,9 @@ public class Vehicle
         this.amount = amount;
         this.maxSpeed = maxSpeed;
     }
-
+    public int DecreaseVehicleAmount()
+    {
+        bool lessEqualsZero = amount <= 0;
+        return lessEqualsZero ? 0 : (--amount);
+    }
 }

@@ -28,11 +28,15 @@ public class VehicleForm : MonoBehaviour
     {
 
         if (vehiclesInfo == null) return;
-
         foreach (var item in vehiclesInfo)
         {
 
             GameObject spawnedObject = Instantiate(panel, parent.transform);
+            Debug.Log(item.Value.amount + " VEHICLE AMOUNT ");
+            if(item.Value.amount <= 0) 
+            {
+                spawnedObject.GetComponent<Button>().interactable = false;
+            } else spawnedObject.GetComponent<Button>().interactable = true;
             spawnedObject.name = item.Key.ToString() + "Vehicle";
             spawnedObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.Value.vehicleName;
             spawnedObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.Value.pricePerHour.ToString() + " UAH/HOUR";
@@ -41,8 +45,6 @@ public class VehicleForm : MonoBehaviour
             // Debug.Log(spawnedObject.name);
             // Debug.Log(item.Key + " VEHICLE ID ");
             spawnedObject.GetComponent<Button>().onClick.AddListener(delegate { ChooseVehicle(item.Key); });
-
-
         }
     }
     public void ChooseVehicle(int vehicleId)
@@ -59,6 +61,31 @@ public class VehicleForm : MonoBehaviour
         Vehicle vehicle;
         vehiclesInfo.TryGetValue(this.vehicleId.Value, out vehicle);
         return (int)(hours * vehicle.pricePerHour);
+    }
+    public void DecreaseVehicleAmount()
+    {
+        Vehicle vehicle;
+        vehiclesInfo.TryGetValue(this.vehicleId.Value, out vehicle);
+        vehicle.DecreaseVehicleAmount();
+        dBManager.UpdateVehicleAmount(vehicle);
+        
+        Debug.Log(vehicle.amount);
+        StartCoroutine(ReloadVehicleForm());
+    }
+    private IEnumerator ReloadVehicleForm()
+    {
+        ClearPanels();
+        yield return null;
+        dBManager.FillListWithData(out vehiclesInfo);
+        yield return null;
+        SpawnPanels();
+    }
+    private void ClearPanels()
+    {
+        foreach(Transform item in parent.transform)
+        {
+            Destroy(item.gameObject);
+        }
     }
     // public void Return()
     // {

@@ -58,19 +58,28 @@ public class DBManager : MonoBehaviour
         while (dataReader.Read())
         {
             var id = dataReader.GetInt32(0);
-            //Debug.Log(id + " ID ");
-            var name = dataReader.GetString(1);
-            //Debug.Log(name + " NAME ");
-            var price = dataReader.GetInt32(2);
-           // Debug.Log(price + "PRICE PER HOUR");
-            var type = dataReader.GetString(3);
-            //Debug.Log(type + "TYPE");
-            var maxSpeed = dataReader.GetFloat(4);
-            //Debug.Log(maxSpeed + "MAX SPEED");
+            var name = dataReader.GetString(1);  
+            var price = dataReader.GetInt32(2); 
+            var type = dataReader.GetString(3); 
+            var maxSpeed = dataReader.GetFloat(4);      
             var amount = dataReader.GetInt32(5);
-            //Debug.Log(amount + " AMOUNT ");
             Vehicle vehicle = new Vehicle(id, name, price, type, maxSpeed, amount);
             dict.Add(id, vehicle);
         }
+    }
+    public void UpdateVehicleAmount(Vehicle vehicle)
+    {
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand command = dbConnection.CreateCommand();
+        command.CommandText = $"UPDATE Vehicles SET amount = {vehicle.amount} where vehicleID = {vehicle.vehicleID}";
+        try
+        {
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        dbConnection.Close();
     }
 }

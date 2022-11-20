@@ -52,12 +52,12 @@ public class RegisterForm : MonoBehaviour
             StartCoroutine(Warning());
             return;
         }
-
+        
         //Vehicle monowheel = new Vehicle(0, "Monowheel", 100, "Electro", 20f, 3);
         Client client = new Client(nameInput.text, surnameInput.text, phoneInput.text, vehicleForm.vehicleId.Value, hours);
         dBManager.AddUserToTable(client);
-
-
+        vehicleForm.DecreaseVehicleAmount();
+        
         ClearInputFields();
         //Debug.Log(client.firstName  +  "  " + client.surname + "  " + client.phoneNumber);
     }
