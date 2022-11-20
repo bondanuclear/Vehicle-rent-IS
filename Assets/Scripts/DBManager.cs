@@ -20,7 +20,7 @@ public class DBManager : MonoBehaviour
         IDbConnection dbConnection = CreateAndOpenDatabase();
         IDbCommand  command = dbConnection.CreateCommand();
         //SqliteCommand insertSQL = new SqliteCommand("INSERT INTO Clients (clientID, Firstname, Surname, PhoneNumber) VALUES (35, 'ss', 'sss', '380994455')");
-        command.CommandText = $"INSERT INTO Clients(FirstName, Surname, PhoneNumber, VehicleID) VALUES ('{client.firstName}' , '{client.surname}', '{client.phoneNumber}', {client.VehicleID})";
+        command.CommandText = $"INSERT INTO Clients(FirstName, Surname, PhoneNumber, VehicleID, RentedHours) VALUES ('{client.firstName}' , '{client.surname}', '{client.phoneNumber}', {client.VehicleID}, {client.rentedHours})";
         //"INSERT OR REPLACE INTO HitCountTableSimple (id, hits) VALUES (0, " + hitCount + ")"; // 10
         // command.Parameters.Add('3');
         // command.Parameters.Add(client.firstName);

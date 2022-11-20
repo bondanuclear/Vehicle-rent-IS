@@ -37,6 +37,7 @@ public class VehicleForm : MonoBehaviour
             spawnedObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.Value.vehicleName;
             spawnedObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.Value.pricePerHour.ToString() + " UAH/HOUR";
             spawnedObject.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.Value.type;
+            spawnedObject.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = item.Value.amount.ToString();
             // Debug.Log(spawnedObject.name);
             // Debug.Log(item.Key + " VEHICLE ID ");
             spawnedObject.GetComponent<Button>().onClick.AddListener(delegate { ChooseVehicle(item.Key); });
@@ -52,6 +53,12 @@ public class VehicleForm : MonoBehaviour
         Vehicle vehicle;
         vehiclesInfo.TryGetValue(vehicleId, out vehicle);
         chosenVehicleText.text = $"You want to rent: {vehicle.vehicleName} ";
+    }
+    public int CalculateFullPrice(int hours)
+    {
+        Vehicle vehicle;
+        vehiclesInfo.TryGetValue(this.vehicleId.Value, out vehicle);
+        return (int)(hours * vehicle.pricePerHour);
     }
     // public void Return()
     // {

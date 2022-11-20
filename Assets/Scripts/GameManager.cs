@@ -8,13 +8,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    // [Header("Vehicle Panel")]
-    // [SerializeField] GameObject panel = null;
-    // [SerializeField] GameObject parent = null;
-    // [SerializeField] TextMeshProUGUI chosenVehicleText = null;
-    
-    // Dictionary<int, Vehicle> vehiclesInfo;
-    // public int? vehicleId {get; private set;} = null;
     [SerializeField] Button choose;
     [SerializeField] Button returnToVehicles;
     DBManager dBManager;

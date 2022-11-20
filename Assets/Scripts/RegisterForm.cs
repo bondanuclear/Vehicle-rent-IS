@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,11 +7,14 @@ using UnityEngine.UI;
 
 public class RegisterForm : MonoBehaviour
 {
+    public int fullPrice = 0;
     [SerializeField] GameObject parentRegisterPanel = null;
     [SerializeField] TMP_InputField nameInput;
     [SerializeField] TMP_InputField surnameInput;
     [SerializeField] TMP_InputField phoneInput;
     [SerializeField] TextMeshProUGUI warningText;
+    [SerializeField] int hours = 2;
+    [SerializeField] TMP_Dropdown ddHours;
     [Header("To change the header:")]
     [SerializeField] GameObject RFheader = null;
     [SerializeField] GameObject VFheader = null;
@@ -26,10 +30,20 @@ public class RegisterForm : MonoBehaviour
     private void OnEnable()
     {
         submitButton.onClick.AddListener(RegisterUser);   
+        ddHours.onValueChanged.AddListener(delegate{PickHours(ddHours);});
     }
 
-
-
+    public void PickHours(TMP_Dropdown sender)
+    {
+        string value = sender.options[sender.value].text;
+        //Debug.Log(value);
+        hours = Convert.ToInt32(value[0].ToString());
+        //Debug.Log(hours);
+        fullPrice = vehicleForm.CalculateFullPrice(hours);
+        Debug.Log(fullPrice);
+        
+    }
+    
     public void RegisterUser()
     {
         if (nameInput.text == "" || surnameInput.text == "" || phoneInput.text == "")
@@ -40,7 +54,7 @@ public class RegisterForm : MonoBehaviour
         }
 
         //Vehicle monowheel = new Vehicle(0, "Monowheel", 100, "Electro", 20f, 3);
-        Client client = new Client(nameInput.text, surnameInput.text, phoneInput.text, vehicleForm.vehicleId.Value);
+        Client client = new Client(nameInput.text, surnameInput.text, phoneInput.text, vehicleForm.vehicleId.Value, hours);
         dBManager.AddUserToTable(client);
 
 

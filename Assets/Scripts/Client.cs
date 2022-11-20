@@ -9,12 +9,14 @@ public class Client
     public string surname {get; private set;}
     public string phoneNumber { get; private set; }
     public int VehicleID {get; private set;}
-    public Client(string firstName, string surname, string phoneNumber, int VehicleID, int clientID = 0)
+    public int rentedHours {get; private set;}
+    public Client(string firstName, string surname, string phoneNumber, int VehicleID, int rentedHours, int clientID = 0)
     {
         this.clientID = clientID;
         this.firstName = firstName;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
         this.VehicleID = VehicleID;
+        this.rentedHours = rentedHours;
     }
 }
