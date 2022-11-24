@@ -21,7 +21,7 @@ public class VehicleForm : MonoBehaviour
         chosenVehicleText.text = "";
     }
     private void Start() {
-        dBManager.FillListWithData(out PersistentData.instance.vehiclesInfo);
+        //dBManager.FillListWithData(out PersistentData.instance.vehiclesInfo);
         SpawnVehiclePanels();
     }
     public void SpawnVehiclePanels()

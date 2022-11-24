@@ -77,17 +77,17 @@ public class DBManager : MonoBehaviour
         while (dataReader.Read())
         {
             var id = dataReader.GetInt32(0);
-            Debug.Log(id + "client ID ");
+           // Debug.Log(id + "client ID ");
             var name = dataReader.GetString(1);
-            Debug.Log(name + "client Name ");
+           // Debug.Log(name + "client Name ");
             var surname = dataReader.GetString(2);
-            Debug.Log(surname + "client SURNAME ");
+           // Debug.Log(surname + "client SURNAME ");
             var phoneNumber = dataReader.GetString(3);
-            Debug.Log(phoneNumber + "client phoneNumber ");
+           // Debug.Log(phoneNumber + "client phoneNumber ");
             var vehicleID = dataReader.GetInt32(4);
-            Debug.Log(vehicleID + "client vehicleID ");
+           // Debug.Log(vehicleID + "client vehicleID ");
             var rentedHours = dataReader.GetInt32(5);
-            Debug.Log(rentedHours + "client rentedHours ");
+            //Debug.Log(rentedHours + "client rentedHours ");
             Client client = new Client(name, surname, phoneNumber, vehicleID, rentedHours, id);
             dict.Add(id, client);
         }
