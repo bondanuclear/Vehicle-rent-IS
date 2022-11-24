@@ -32,7 +32,7 @@ public class VehicleForm : MonoBehaviour
         {
 
             GameObject spawnedObject = Instantiate(panel, parent.transform);
-            Debug.Log(item.Value.amount + " VEHICLE AMOUNT ");
+            //Debug.Log(item.Value.amount + " VEHICLE AMOUNT ");
             if(item.Value.amount <= 0) 
             {
                 spawnedObject.GetComponent<Button>().interactable = false;
@@ -70,7 +70,7 @@ public class VehicleForm : MonoBehaviour
         vehicle.DecreaseVehicleAmount();
         dBManager.UpdateVehicleAmount(vehicle);
         
-        Debug.Log(vehicle.amount);
+        //Debug.Log(vehicle.amount);
         StartCoroutine(ReloadVehicleForm());
     }
     private IEnumerator ReloadVehicleForm()

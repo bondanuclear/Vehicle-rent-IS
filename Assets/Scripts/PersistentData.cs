@@ -10,6 +10,13 @@ public class PersistentData : MonoBehaviour
 
     public Dictionary<int, Client> clientsInfo;
     DBManager dBManager;
+    private void OnEnable() {
+        RegisterForm.addClient += AddClientToDictionary;
+        
+    }
+    private void OnDisable() {
+        RegisterForm.addClient -= AddClientToDictionary;
+    }
     private void Awake() {
         if(instance != null)
         {
@@ -27,7 +34,15 @@ public class PersistentData : MonoBehaviour
         }
 
     }
-    private void Start() {
-        
+    private void AddClientToDictionary(Client client)
+    {
+        Debug.Log(clientsInfo.Count.ToString() + " COUNT CLIENTS " ?? "its null");
+        Debug.Log("Client ID " + client.clientID);
+        clientsInfo.Add(client.clientID, client);
+    }
+    public void DeleteClientFromDictionary(int clientID)
+    {
+        dBManager.DeleteClientFromTable(clientID);
+        clientsInfo.Remove(clientID);
     }
 }

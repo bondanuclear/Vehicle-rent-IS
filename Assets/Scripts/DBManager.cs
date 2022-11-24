@@ -123,4 +123,45 @@ public class DBManager : MonoBehaviour
         }
         dbConnection.Close();
     }
+    public Client GetLastRow()
+    {
+        Client client = null;
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
+        dbCommandReadValues.CommandText = "SELECT * FROM Clients ORDER BY clientID DESC LIMIT 1;";
+        IDataReader dataReader = dbCommandReadValues.ExecuteReader();
+        while (dataReader.Read())
+        {
+            var id = dataReader.GetInt32(0);
+            //Debug.Log(id + "client ID ");
+            var name = dataReader.GetString(1);
+            //Debug.Log(name + "client Name ");
+            var surname = dataReader.GetString(2);
+            //Debug.Log(surname + "client SURNAME ");
+            var phoneNumber = dataReader.GetString(3);
+            //Debug.Log(phoneNumber + "client phoneNumber ");
+            var vehicleID = dataReader.GetInt32(4);
+            // Debug.Log(vehicleID + "client vehicleID ");
+            var rentedHours = dataReader.GetInt32(5);
+            // Debug.Log(rentedHours + "client rentedHours ");
+            client = new Client(name, surname, phoneNumber, vehicleID, rentedHours, id);
+
+        }
+        return client;
+    }
+    public void DeleteClientFromTable(int clientID)
+    {
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand command = dbConnection.CreateCommand();
+        command.CommandText = $"DELETE FROM Clients WHERE clientID = {clientID}";
+        try
+        {
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        dbConnection.Close();
+    }
 }

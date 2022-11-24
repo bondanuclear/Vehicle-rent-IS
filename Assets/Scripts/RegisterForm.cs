@@ -21,8 +21,11 @@ public class RegisterForm : MonoBehaviour
     [SerializeField] GameObject VFheader = null;
     DBManager dBManager;
     VehicleForm vehicleForm;
-    [SerializeField] Button submitButton; 
     
+    [SerializeField] Button submitButton; 
+    // delegates
+    public delegate void AddClient(Client client);
+    public static AddClient addClient;
     private void Awake() {
         dBManager = GetComponent<DBManager>();  
         vehicleForm = GetComponent<VehicleForm>();
@@ -62,14 +65,23 @@ public class RegisterForm : MonoBehaviour
             StartCoroutine(Warning());
             return;
         }
-        
+
         //Vehicle monowheel = new Vehicle(0, "Monowheel", 100, "Electro", 20f, 3);
         Client client = new Client(nameInput.text, surnameInput.text, phoneInput.text, vehicleForm.vehicleId.Value, hours);
         dBManager.AddUserToTable(client);
         vehicleForm.DecreaseVehicleAmount();
-        
+
         ClearInputFields();
+
+        AddClientToDictionary();
+
         //Debug.Log(client.firstName  +  "  " + client.surname + "  " + client.phoneNumber);
+    }
+
+    private void AddClientToDictionary()
+    {
+        Client client = dBManager.GetLastRow();
+        addClient?.Invoke(client);
     }
 
     private void ClearInputFields()

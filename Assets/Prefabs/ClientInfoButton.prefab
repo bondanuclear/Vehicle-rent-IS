@@ -129,7 +129,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -18.856415, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -170,8 +170,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 390.9, y: -1}
-  m_SizeDelta: {x: 108.69, y: 35}
+  m_AnchoredPosition: {x: 378.8, y: -1}
+  m_SizeDelta: {x: 84.446, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4869559016878324194
 CanvasRenderer:
@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 4869559016940780634}
   - component: {fileID: 4869559016940780635}
   m_Layer: 5
-  m_Name: HoursRented (1)
+  m_Name: VehicleName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -305,7 +305,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 501.6, y: -1}
+  m_AnchoredPosition: {x: 477.4, y: -1}
   m_SizeDelta: {x: 108.69, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4869559016940780634
@@ -336,7 +336,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Electro Bicycle
+  m_text: Electro Scooter m3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 89597ceb7789abb40850967c3807991f, type: 2}
   m_sharedMaterial: {fileID: 6297757556416488565, guid: 89597ceb7789abb40850967c3807991f, type: 2}
@@ -399,7 +399,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -50.86017, w: 0}
+  m_margin: {x: 0, y: 0, z: -59.839417, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -716,8 +716,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.3955078, y: 32.9781}
-  m_SizeDelta: {x: -4.5811, y: -265.9561}
+  m_AnchoredPosition: {x: -2.3955078, y: 69.73839}
+  m_SizeDelta: {x: -4.5811, y: -339.4766}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6242747417641791758
 MonoBehaviour:
