@@ -61,10 +61,35 @@ public class DBManager : MonoBehaviour
             var name = dataReader.GetString(1);  
             var price = dataReader.GetInt32(2); 
             var type = dataReader.GetString(3); 
-            var maxSpeed = dataReader.GetFloat(4);      
+            var totalMileage = dataReader.GetFloat(4);      
             var amount = dataReader.GetInt32(5);
-            Vehicle vehicle = new Vehicle(id, name, price, type, maxSpeed, amount);
+            Vehicle vehicle = new Vehicle(id, name, price, type, totalMileage, amount);
             dict.Add(id, vehicle);
+        }
+    }
+    public void FillListWithClientsData(out Dictionary<int, Client> dict)
+    {
+        dict = new Dictionary<int, Client>();
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
+        dbCommandReadValues.CommandText = "SELECT * FROM Clients";
+        IDataReader dataReader = dbCommandReadValues.ExecuteReader();
+        while (dataReader.Read())
+        {
+            var id = dataReader.GetInt32(0);
+            Debug.Log(id + "client ID ");
+            var name = dataReader.GetString(1);
+            Debug.Log(name + "client Name ");
+            var surname = dataReader.GetString(2);
+            Debug.Log(surname + "client SURNAME ");
+            var phoneNumber = dataReader.GetString(3);
+            Debug.Log(phoneNumber + "client phoneNumber ");
+            var vehicleID = dataReader.GetInt32(4);
+            Debug.Log(vehicleID + "client vehicleID ");
+            var rentedHours = dataReader.GetInt32(5);
+            Debug.Log(rentedHours + "client rentedHours ");
+            Client client = new Client(name, surname, phoneNumber, vehicleID, rentedHours, id);
+            dict.Add(id, client);
         }
     }
     public void UpdateVehicleAmount(Vehicle vehicle)
@@ -72,6 +97,22 @@ public class DBManager : MonoBehaviour
         IDbConnection dbConnection = CreateAndOpenDatabase();
         IDbCommand command = dbConnection.CreateCommand();
         command.CommandText = $"UPDATE Vehicles SET amount = {vehicle.amount} where vehicleID = {vehicle.vehicleID}";
+        try
+        {
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        dbConnection.Close();
+    }
+    // обновити пробіг певного транспорту
+    public void UpdateVehicleMileage(Vehicle vehicle)
+    {
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand command = dbConnection.CreateCommand();
+        command.CommandText = $"UPDATE Vehicles SET amount = {vehicle.totalMileage} where vehicleID = {vehicle.vehicleID}";
         try
         {
             command.ExecuteNonQuery();

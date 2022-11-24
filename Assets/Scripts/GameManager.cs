@@ -34,16 +34,17 @@ public class GameManager : MonoBehaviour
         registerForm.DeactivateRegForm();
         choose.gameObject.SetActive(true);
     }
-//?? to do: if a person puts the same number inside the input field: track the exception
-// and alert the user.
-//++ to do: add "Amount" of vehicles to UI. Amount -= 1 after person rents it.
-//++ to do: if the amount of a certain vehicle is <= 0 then disable the ability to rent it.
-//?- if a person returns a vehicle then amount of this vehicles += 1
-// to do: manager scene, ability to track the statistics of rented vehicles
-// to do: new table with income (рухи в лекціях): data vehicle hours fullPrice 
-// conclusion: month vehicle allHours sumPrice - conclusion after each month
-// 
-//+- update DBManager : +ability to update fields. ability to find by id or sth else;
+    //?? to do: if a person puts the same number inside the input field: track the exception
+    // and alert the user.
+    //++ to do: add "Amount" of vehicles to UI. Amount -= 1 after person rents it.
+    //++ to do: if the amount of a certain vehicle is <= 0 then disable the ability to rent it.
+    //PROCESSING if a person returns a vehicle then amount of this vehicles += 1
+    // PROCESSING ability to find by id or sth else;
+    //PROCESSING to do: new table with income (рухи в лекціях): data vehicle hours fullPrice 
+    // to do: manager scene, ability to track the statistics of rented vehicles
+    // conclusion: month vehicle allHours sumPrice - conclusion after each month
+    // 
+    //+ update DBManager : +ability to update fields. 
     // public void AddUser()
     // {
     //     Client client = new Client(5, "aaa", "ddd", "178489", 430);
@@ -52,12 +53,12 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     // void SpawnPanels()
     // {
-        
+
     //     if(vehiclesInfo == null) return;
 
     //     foreach(var item in vehiclesInfo)
     //     {
-            
+
     //         GameObject spawnedObject  = Instantiate(panel, parent.transform);
     //         spawnedObject.name = item.Key.ToString() + "Vehicle";
     //         spawnedObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.Value.vehicleName;
@@ -66,8 +67,8 @@ public class GameManager : MonoBehaviour
     //         // Debug.Log(spawnedObject.name);
     //         // Debug.Log(item.Key + " VEHICLE ID ");
     //         spawnedObject.GetComponent<Button>().onClick.AddListener(delegate{ChooseVehicle(item.Key);});
-            
-            
+
+
     //     }
     // }
     // public void ChooseVehicle(int vehicleId)

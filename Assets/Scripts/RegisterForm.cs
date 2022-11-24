@@ -13,6 +13,7 @@ public class RegisterForm : MonoBehaviour
     [SerializeField] TMP_InputField surnameInput;
     [SerializeField] TMP_InputField phoneInput;
     [SerializeField] TextMeshProUGUI warningText;
+    [SerializeField] TextMeshProUGUI priceText;
     [SerializeField] int hours = 2;
     [SerializeField] TMP_Dropdown ddHours;
     [Header("To change the header:")]
@@ -26,13 +27,22 @@ public class RegisterForm : MonoBehaviour
         dBManager = GetComponent<DBManager>();  
         vehicleForm = GetComponent<VehicleForm>();
     }
-   
+   private void Start() {
+        //Debug.Log(priceText.text = $"Price: {} UAH";);
+        //priceText.text = $"Price: {} UAH";
+    }
     private void OnEnable()
     {
         submitButton.onClick.AddListener(RegisterUser);   
         ddHours.onValueChanged.AddListener(delegate{PickHours(ddHours);});
     }
-
+    private void Update() {
+        if(vehicleForm.haveChosen)
+        {
+            vehicleForm.haveChosen = false;
+            priceText.text = $"Price: {vehicleForm.CalculateFullPrice(hours)} UAH";
+        }
+    }
     public void PickHours(TMP_Dropdown sender)
     {
         string value = sender.options[sender.value].text;
@@ -41,7 +51,7 @@ public class RegisterForm : MonoBehaviour
         //Debug.Log(hours);
         fullPrice = vehicleForm.CalculateFullPrice(hours);
         Debug.Log(fullPrice);
-        
+        priceText.text = $"Price: {fullPrice} UAH";
     }
     
     public void RegisterUser()

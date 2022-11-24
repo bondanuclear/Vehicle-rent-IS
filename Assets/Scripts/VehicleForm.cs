@@ -11,24 +11,24 @@ public class VehicleForm : MonoBehaviour
     public GameObject parent  = null;
     [SerializeField] TextMeshProUGUI chosenVehicleText = null;
 
-    Dictionary<int, Vehicle> vehiclesInfo;
+    //Dictionary<int, Vehicle> vehiclesInfo;
     public int? vehicleId { get; private set; } = null;
     private DBManager dBManager;
-
+    public bool haveChosen {get; set;} = false;
     private void Awake()
     {
         dBManager = GetComponent<DBManager>();
         chosenVehicleText.text = "";
     }
     private void Start() {
-        dBManager.FillListWithData(out vehiclesInfo);
-        SpawnPanels();
+        dBManager.FillListWithData(out PersistentData.instance.vehiclesInfo);
+        SpawnVehiclePanels();
     }
-    public void SpawnPanels()
+    public void SpawnVehiclePanels()
     {
 
-        if (vehiclesInfo == null) return;
-        foreach (var item in vehiclesInfo)
+        if (PersistentData.instance.vehiclesInfo == null) return;
+        foreach (var item in PersistentData.instance.vehiclesInfo)
         {
 
             GameObject spawnedObject = Instantiate(panel, parent.transform);
@@ -53,19 +53,20 @@ public class VehicleForm : MonoBehaviour
         this.vehicleId = vehicleId;
         Debug.Log(this.vehicleId);
         Vehicle vehicle;
-        vehiclesInfo.TryGetValue(vehicleId, out vehicle);
+        PersistentData.instance.vehiclesInfo.TryGetValue(vehicleId, out vehicle);
         chosenVehicleText.text = $"You want to rent: {vehicle.vehicleName} ";
+        haveChosen = true;
     }
     public int CalculateFullPrice(int hours)
     {
         Vehicle vehicle;
-        vehiclesInfo.TryGetValue(this.vehicleId.Value, out vehicle);
+        PersistentData.instance.vehiclesInfo.TryGetValue(this.vehicleId.Value, out vehicle);
         return (int)(hours * vehicle.pricePerHour);
     }
     public void DecreaseVehicleAmount()
     {
         Vehicle vehicle;
-        vehiclesInfo.TryGetValue(this.vehicleId.Value, out vehicle);
+        PersistentData.instance.vehiclesInfo.TryGetValue(this.vehicleId.Value, out vehicle);
         vehicle.DecreaseVehicleAmount();
         dBManager.UpdateVehicleAmount(vehicle);
         
@@ -76,9 +77,9 @@ public class VehicleForm : MonoBehaviour
     {
         ClearPanels();
         yield return null;
-        dBManager.FillListWithData(out vehiclesInfo);
+        dBManager.FillListWithData(out PersistentData.instance.vehiclesInfo);
         yield return null;
-        SpawnPanels();
+        SpawnVehiclePanels();
     }
     private void ClearPanels()
     {

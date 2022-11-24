@@ -8,16 +8,16 @@ public class Vehicle
     public string vehicleName {get; private set;}
     public float pricePerHour {get; private set;}
     public string type { get; private set; }
-    public float maxSpeed {get; private set;}
+    public float totalMileage {get; private set;}
     public int amount { get; private set; }
-    public Vehicle(int vehicleID, string vehicleName, float pricePerHour, string type, float maxSpeed, int amount)
+    public Vehicle(int vehicleID, string vehicleName, float pricePerHour, string type, float totalMileage, int amount)
     {
         this.vehicleID = vehicleID;
         this.vehicleName = vehicleName;
         this.pricePerHour = pricePerHour;
         this.type = type;
         this.amount = amount;
-        this.maxSpeed = maxSpeed;
+        this.totalMileage = totalMileage;
     }
     public int DecreaseVehicleAmount()
     {
