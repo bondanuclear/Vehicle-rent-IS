@@ -45,4 +45,10 @@ public class PersistentData : MonoBehaviour
         dBManager.DeleteClientFromTable(clientID);
         clientsInfo.Remove(clientID);
     }
+    public int CalculateFullPrice(int vehicleID, int hours)
+    {
+        Vehicle vehicle;
+        PersistentData.instance.vehiclesInfo.TryGetValue(vehicleID, out vehicle);
+        return (int)(hours * vehicle.pricePerHour);
+    }
 }

@@ -24,4 +24,13 @@ public class Vehicle
         bool lessEqualsZero = amount <= 0;
         return lessEqualsZero ? 0 : (--amount);
     }
+    public void DecreaseAmount()
+    {
+        bool lessEqualsZero = amount <= 0;
+        amount = lessEqualsZero ? 0 : amount--;
+    }
+    public int IncreaseVehicleAmount()
+    {
+        return ++amount;
+    }
 }

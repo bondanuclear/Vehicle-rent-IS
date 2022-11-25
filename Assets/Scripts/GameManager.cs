@@ -38,10 +38,10 @@ public class GameManager : MonoBehaviour
     // and alert the user.
     //++ to do: add "Amount" of vehicles to UI. Amount -= 1 after person rents it.
     //++ to do: if the amount of a certain vehicle is <= 0 then disable the ability to rent it.
-    //PROCESSING if a person returns a vehicle then amount of this vehicles += 1
+    //++ if a person returns a vehicle then amount of this vehicles += 1
     // PROCESSING ability to find by id or sth else;
     //PROCESSING to do: new table with income (рухи в лекціях): data vehicle hours fullPrice 
-    // to do: manager scene, ability to track the statistics of rented vehicles
+    //++ to do: manager scene, ability to track the statistics of rented vehicles
     // conclusion: month vehicle allHours sumPrice - conclusion after each month
     // 
     //+ update DBManager : +ability to update fields. 

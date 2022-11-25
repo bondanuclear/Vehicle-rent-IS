@@ -43,7 +43,8 @@ public class RegisterForm : MonoBehaviour
         if(vehicleForm.haveChosen)
         {
             vehicleForm.haveChosen = false;
-            priceText.text = $"Price: {vehicleForm.CalculateFullPrice(hours)} UAH";
+            priceText.text = $"Price: {PersistentData.instance.CalculateFullPrice(vehicleForm.vehicleId.Value, hours)} UAH";
+           // priceText.text = $"Price: {vehicleForm.CalculateFullPrice(hours)} UAH";
         }
     }
     public void PickHours(TMP_Dropdown sender)
@@ -52,7 +53,8 @@ public class RegisterForm : MonoBehaviour
         //Debug.Log(value);
         hours = Convert.ToInt32(value[0].ToString());
         //Debug.Log(hours);
-        fullPrice = vehicleForm.CalculateFullPrice(hours);
+        //fullPrice = vehicleForm.CalculateFullPrice(hours);
+        fullPrice = PersistentData.instance.CalculateFullPrice(vehicleForm.vehicleId.Value, hours);
         Debug.Log(fullPrice);
         priceText.text = $"Price: {fullPrice} UAH";
     }
@@ -69,10 +71,11 @@ public class RegisterForm : MonoBehaviour
         //Vehicle monowheel = new Vehicle(0, "Monowheel", 100, "Electro", 20f, 3);
         Client client = new Client(nameInput.text, surnameInput.text, phoneInput.text, vehicleForm.vehicleId.Value, hours);
         dBManager.AddUserToTable(client);
+        // -
         vehicleForm.DecreaseVehicleAmount();
-
+        // +
         ClearInputFields();
-
+        // + 
         AddClientToDictionary();
 
         //Debug.Log(client.firstName  +  "  " + client.surname + "  " + client.phoneNumber);

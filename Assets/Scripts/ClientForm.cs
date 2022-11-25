@@ -10,12 +10,13 @@ public class ClientForm : MonoBehaviour
     [SerializeField] GameObject parentObject;
     bool hasSpawned = false;
     DBManager dBManager;
-    int? clientIDHelper = null;
+    UserInfo userInfo;
+    public int? clientIDHelper {get; private set;} = null;
+    private void Awake() {
+        userInfo = GetComponent<UserInfo>();
+    }
     private void Start() {
         dBManager = FindObjectOfType<DBManager>();
-        
-    }
-    private void OnEnable() {
         
     }
     public void SpawnClientPanels()
@@ -45,6 +46,13 @@ public class ClientForm : MonoBehaviour
     {
        Debug.Log("Client ID = " + clientId);
        clientIDHelper = clientId;
+       StartCoroutine(userInfo.ShowUserInfo(clientId));
+
+    }
+    // розрахувати вартість
+    public void EstimateValue()
+    {
+
     }
     public void DeleteClient()
     {
@@ -53,12 +61,36 @@ public class ClientForm : MonoBehaviour
             Debug.LogWarning("You have not chosen a client to delete");
             return;
         }
+        // оскільки ми розраховуємо клієнта, нам потрібно повернути транспорт, який
+        // він брав
         
 
+        Vehicle vehicle = GetVehicleByClientID(this.clientIDHelper.Value);
         PersistentData.instance.DeleteClientFromDictionary(clientIDHelper.Value);
         Transform objectToDelete = parentObject.gameObject.transform.Find(clientIDHelper.Value+"Client");
         //Debug.Log($"Gonna destroy {(clientIDHelper - 1).Value} object");
         Destroy(objectToDelete.gameObject);
+        clientIDHelper = null;
+        ReturnTakenTransport(vehicle);
+    }
+    private Vehicle GetVehicleByClientID(int clientIDHelper)
+    {
+        Vehicle result;
+        Client client;
+        PersistentData.instance.clientsInfo.TryGetValue(clientIDHelper, out client);
+        PersistentData.instance.vehiclesInfo.TryGetValue(client.VehicleID, out result);
+        return result;
+    }
+    public void ReturnTakenTransport(Vehicle vehicle)
+    {
+        // maybe needs refactoring, but at least it works for now
+        int finalAmount = vehicle.IncreaseVehicleAmount();
+        Debug.Log(finalAmount + " FINAL AMOUNT ");
+        Vehicle updatedVehicle = new Vehicle(vehicle.vehicleID, vehicle.vehicleName, 
+        vehicle.pricePerHour, vehicle.type, vehicle.totalMileage, finalAmount);
+        dBManager.UpdateVehicleAmount(updatedVehicle);
+        PersistentData.instance.vehiclesInfo[vehicle.vehicleID] = updatedVehicle;
+        Debug.Log(PersistentData.instance.vehiclesInfo[vehicle.vehicleID].amount + " UPDATED ");
     }
     // можливо колись знадобиться
     private void AddClientPanel()

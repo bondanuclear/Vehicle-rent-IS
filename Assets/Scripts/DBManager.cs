@@ -66,6 +66,7 @@ public class DBManager : MonoBehaviour
             Vehicle vehicle = new Vehicle(id, name, price, type, totalMileage, amount);
             dict.Add(id, vehicle);
         }
+        dbConnection.Close();
     }
     public void FillListWithClientsData(out Dictionary<int, Client> dict)
     {
@@ -91,6 +92,7 @@ public class DBManager : MonoBehaviour
             Client client = new Client(name, surname, phoneNumber, vehicleID, rentedHours, id);
             dict.Add(id, client);
         }
+        dbConnection.Close();
     }
     public void UpdateVehicleAmount(Vehicle vehicle)
     {
@@ -147,6 +149,7 @@ public class DBManager : MonoBehaviour
             client = new Client(name, surname, phoneNumber, vehicleID, rentedHours, id);
 
         }
+        dbConnection.Close();
         return client;
     }
     public void DeleteClientFromTable(int clientID)

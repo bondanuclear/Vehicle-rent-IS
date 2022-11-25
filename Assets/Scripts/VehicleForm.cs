@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -63,16 +64,32 @@ public class VehicleForm : MonoBehaviour
         PersistentData.instance.vehiclesInfo.TryGetValue(this.vehicleId.Value, out vehicle);
         return (int)(hours * vehicle.pricePerHour);
     }
+    //
+    //
+    // needs refactoring
     public void DecreaseVehicleAmount()
     {
+        
         Vehicle vehicle;
         PersistentData.instance.vehiclesInfo.TryGetValue(this.vehicleId.Value, out vehicle);
-        vehicle.DecreaseVehicleAmount();
+        int finalAmount = vehicle.DecreaseVehicleAmount();
+        Debug.Log(finalAmount + " FINAL AMOUNT ");
+        Vehicle updatedVehicle = new Vehicle(vehicle.vehicleID, vehicle.vehicleName,
+        vehicle.pricePerHour, vehicle.type, vehicle.totalMileage, finalAmount);
+        // vehicle.DecreaseAmount();
         dBManager.UpdateVehicleAmount(vehicle);
-        
+        PersistentData.instance.vehiclesInfo[vehicle.vehicleID] = updatedVehicle;
+        ChangeVehiclePanel(updatedVehicle);
         //Debug.Log(vehicle.amount);
-        StartCoroutine(ReloadVehicleForm());
+        //StartCoroutine(ReloadVehicleForm());
     }
+
+    private void ChangeVehiclePanel(Vehicle vehicle)
+    {
+        GameObject objectToChange = parent.transform.Find(vehicle.vehicleID + "Vehicle").gameObject;
+        objectToChange.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = vehicle.amount.ToString(); 
+    }
+
     private IEnumerator ReloadVehicleForm()
     {
         ClearPanels();
