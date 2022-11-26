@@ -54,12 +54,12 @@ public class ClientForm : MonoBehaviour
     {
 
     }
-    public void DeleteClient()
+    public Vehicle DeleteClient()
     {
         if(clientIDHelper == null)
         {
             Debug.LogWarning("You have not chosen a client to delete");
-            return;
+            return null;
         }
         // оскільки ми розраховуємо клієнта, нам потрібно повернути транспорт, який
         // він брав
@@ -72,6 +72,8 @@ public class ClientForm : MonoBehaviour
         Destroy(objectToDelete.gameObject);
         clientIDHelper = null;
         ReturnTakenTransport(vehicle);
+        return vehicle;
+        // add data to maintenance table 
     }
     private Vehicle GetVehicleByClientID(int clientIDHelper)
     {
@@ -85,12 +87,12 @@ public class ClientForm : MonoBehaviour
     {
         // maybe needs refactoring, but at least it works for now
         int finalAmount = vehicle.IncreaseVehicleAmount();
-        Debug.Log(finalAmount + " FINAL AMOUNT ");
+        //Debug.Log(finalAmount + " FINAL AMOUNT ");
         Vehicle updatedVehicle = new Vehicle(vehicle.vehicleID, vehicle.vehicleName, 
         vehicle.pricePerHour, vehicle.type, vehicle.totalMileage, finalAmount);
         dBManager.UpdateVehicleAmount(updatedVehicle);
         PersistentData.instance.vehiclesInfo[vehicle.vehicleID] = updatedVehicle;
-        Debug.Log(PersistentData.instance.vehiclesInfo[vehicle.vehicleID].amount + " UPDATED ");
+        //Debug.Log(PersistentData.instance.vehiclesInfo[vehicle.vehicleID].amount + " UPDATED ");
     }
     // можливо колись знадобиться
     private void AddClientPanel()

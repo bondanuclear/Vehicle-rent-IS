@@ -9,6 +9,9 @@ public class PersistentData : MonoBehaviour
     public Dictionary<int, Vehicle> vehiclesInfo;
 
     public Dictionary<int, Client> clientsInfo;
+    // info about battery, average speed, charging hours. also contains vehicle id
+    // for easy access
+    public Dictionary<int, Details> vehicleDetails;
     DBManager dBManager;
     private void OnEnable() {
         RegisterForm.addClient += AddClientToDictionary;
@@ -29,6 +32,7 @@ public class PersistentData : MonoBehaviour
             dBManager = GetComponent<DBManager>();
             dBManager.FillListWithData(out vehiclesInfo);
             dBManager.FillListWithClientsData(out clientsInfo);
+            dBManager.FillDetailsListWithData(out vehicleDetails);
             Debug.Log($"Filling data in {this.name} script");
             DontDestroyOnLoad(this.gameObject);
         }

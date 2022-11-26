@@ -270,6 +270,7 @@ GameObject:
   - component: {fileID: 187080937}
   - component: {fileID: 187080940}
   - component: {fileID: 187080939}
+  - component: {fileID: 187080941}
   m_Layer: 0
   m_Name: AdminManager
   m_TagString: Untagged
@@ -337,6 +338,18 @@ MonoBehaviour:
   hoursText: {fileID: 1260857971}
   vehicleNameText: {fileID: 44401052}
   priceText: {fileID: 1074599335}
+--- !u!114 &187080941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187080936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d991c1bdd9c51841a0b8292ef8497d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &250627991
 GameObject:
   m_ObjectHideFlags: 0
@@ -3735,7 +3748,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Calculate the value
+  m_text: Delete Customer
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 89597ceb7789abb40850967c3807991f, type: 2}
   m_sharedMaterial: {fileID: 6297757556416488565, guid: 89597ceb7789abb40850967c3807991f, type: 2}

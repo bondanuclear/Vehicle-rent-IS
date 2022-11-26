@@ -94,6 +94,32 @@ public class DBManager : MonoBehaviour
         }
         dbConnection.Close();
     }
+    public void FillDetailsListWithData(out Dictionary<int, Details> dict)
+    {
+        dict = new Dictionary<int, Details>();
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
+        dbCommandReadValues.CommandText = "SELECT * FROM VehiclesDetails";
+        IDataReader dataReader = dbCommandReadValues.ExecuteReader();
+        while (dataReader.Read())
+        {
+            var id = dataReader.GetInt32(0);
+            //Debug.Log(id + "details ID ");
+            var vehicleID = dataReader.GetInt32(1);
+            //Debug.Log(vehicleID + " vehicleID ");
+            var maxDistance = dataReader.GetInt32(2);
+            //Debug.Log(maxDistance + " maxDistance ");
+            var batteryWatt = dataReader.GetInt32(3);
+            //Debug.Log(batteryWatt + " batteryWatt ");
+            var averageSpeed = dataReader.GetFloat(4);
+            // Debug.Log(vehicleID + "client vehicleID ");
+            var hoursToCharge = dataReader.GetFloat(5);
+            //Debug.Log(rentedHours + "client rentedHours ");
+            Details details = new Details(id, vehicleID, maxDistance, batteryWatt, averageSpeed, hoursToCharge);
+            dict.Add(id, details);
+        }
+        dbConnection.Close();
+    }
     public void UpdateVehicleAmount(Vehicle vehicle)
     {
         IDbConnection dbConnection = CreateAndOpenDatabase();
@@ -157,6 +183,27 @@ public class DBManager : MonoBehaviour
         IDbConnection dbConnection = CreateAndOpenDatabase();
         IDbCommand command = dbConnection.CreateCommand();
         command.CommandText = $"DELETE FROM Clients WHERE clientID = {clientID}";
+        try
+        {
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        dbConnection.Close();
+    }
+    public void AddToMaintenanceTable(Maintenance maintenance)
+    {
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand command = dbConnection.CreateCommand();
+        //SqliteCommand insertSQL = new SqliteCommand("INSERT INTO Clients (clientID, Firstname, Surname, PhoneNumber) VALUES (35, 'ss', 'sss', '380994455')");
+        command.CommandText = $"INSERT INTO Maintenance_DAY(date, powerChargeCost, mechService, vehicleID, mileage) VALUES ('{maintenance.date}' , {maintenance.powerChargeCost}, {maintenance.mechServiceCost}, {maintenance.vehicleID}, {maintenance.mileage})";
+        //"INSERT OR REPLACE INTO HitCountTableSimple (id, hits) VALUES (0, " + hitCount + ")"; // 10
+        // command.Parameters.Add('3');
+        // command.Parameters.Add(client.firstName);
+        // command.Parameters.Add(client.surname);
+        // command.Parameters.Add(client.phoneNumber);
         try
         {
             command.ExecuteNonQuery();
