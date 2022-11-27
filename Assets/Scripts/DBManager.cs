@@ -233,7 +233,8 @@ public class DBManager : MonoBehaviour
     {
         IDbConnection dbConnection = CreateAndOpenDatabase();
         IDbCommand command = dbConnection.CreateCommand();
-        command.CommandText = $"INSERT INTO RelativeIncome(date, relativeIncome) VALUES ('{income.date}', '{income.price}')";
+        string incomePrice = income.price.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        command.CommandText = $"INSERT INTO RelativeIncome(date, relativeIncome) VALUES ('{income.date}', '{incomePrice}')";
         try
         {
             command.ExecuteNonQuery();
@@ -281,12 +282,33 @@ public class DBManager : MonoBehaviour
         Income income = null;
         IDbConnection dbConnection = CreateAndOpenDatabase();
         IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
-        dbCommandReadValues.CommandText = "SELECT * FROM MonthRelativeIncome ORDER BY mIncomeID DESC LIMIT 1;";
+        dbCommandReadValues.CommandText = $"SELECT * FROM IncomeMov ORDER BY IncomeID DESC LIMIT 1;";
         IDataReader dataReader = dbCommandReadValues.ExecuteReader();
         while (dataReader.Read())
         {
             var id = dataReader.GetInt32(0);
             Debug.Log(id + "income ID ");
+            var date = dataReader.GetString(1);
+            Debug.Log(date + " date ");
+            var price = dataReader.GetFloat(2);
+            var hours = dataReader.GetInt32(3);
+            var vehicleName = dataReader.GetString(4);
+            income = new Income(date, price, hours, vehicleName, id);
+        }
+        dbConnection.Close();
+        return income;
+    }
+    public Income GetLastIncomeRow(string table, string orderID)
+    {
+        Income income = null;
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
+        dbCommandReadValues.CommandText = $"SELECT * FROM {table} ORDER BY {orderID} DESC LIMIT 1;";
+        IDataReader dataReader = dbCommandReadValues.ExecuteReader();
+        while (dataReader.Read())
+        {
+            var id = dataReader.GetInt32(0);
+            Debug.Log(id + "relative income ID ");
             var date = dataReader.GetString(1);
             Debug.Log(date + " date ");
             var stringPrice = dataReader.GetString(2);
@@ -296,5 +318,77 @@ public class DBManager : MonoBehaviour
         }
         dbConnection.Close();
         return income;
+    }
+    public void FillIncomeData(out Dictionary<int, Income> dailyIncome)
+    {
+        dailyIncome = new Dictionary<int, Income>();
+        
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
+        dbCommandReadValues.CommandText = "SELECT * FROM IncomeMov";
+        IDataReader dataReader = dbCommandReadValues.ExecuteReader();
+        while (dataReader.Read())
+        {
+            var id = dataReader.GetInt32(0);
+            //Debug.Log(id + "details ID ");
+            var date = dataReader.GetString(1);
+            //Debug.Log(vehicleID + " vehicleID ");
+            var price = dataReader.GetFloat(2);
+            //Debug.Log(maxDistance + " maxDistance ");
+            var hours = dataReader.GetInt32(3);
+            //Debug.Log(batteryWatt + " batteryWatt ");
+            var vehicleName = dataReader.GetString(4);
+            // Debug.Log(vehicleID + "client vehicleID ");
+            
+            Income income = new Income(date, price, hours, vehicleName, id);
+            dailyIncome.Add(id, income);
+        }
+        dbConnection.Close();
+    }
+    public void FillRelativeIncomeData(out Dictionary<int, Income> relativeIncome)
+    {
+        relativeIncome = new Dictionary<int, Income>();
+
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
+        dbCommandReadValues.CommandText = "SELECT * FROM RelativeIncome";
+        IDataReader dataReader = dbCommandReadValues.ExecuteReader();
+        while (dataReader.Read())
+        {
+            var id = dataReader.GetInt32(0);
+            //Debug.Log(id + "details ID ");
+            var date = dataReader.GetString(1);
+            //Debug.Log(vehicleID + " vehicleID ");
+            var stringPrice = dataReader.GetString(2);
+            float price = (float)double.Parse(stringPrice, System.Globalization.CultureInfo.InvariantCulture);
+            
+
+            Income income = new Income(date, price, 0, "null", id);
+            relativeIncome.Add(id, income);
+        }
+        dbConnection.Close();
+    }
+    public void FillMonthlyIncomeData(out Dictionary<int, Income> monthlyIncome)
+    {
+        monthlyIncome = new Dictionary<int, Income>();
+
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
+        dbCommandReadValues.CommandText = "SELECT * FROM MonthRelativeIncome";
+        IDataReader dataReader = dbCommandReadValues.ExecuteReader();
+        while (dataReader.Read())
+        {
+            var id = dataReader.GetInt32(0);
+            //Debug.Log(id + "details ID ");
+            var date = dataReader.GetString(1);
+            //Debug.Log(vehicleID + " vehicleID ");
+            var stringPrice = dataReader.GetString(2);
+            float price = (float)double.Parse(stringPrice, System.Globalization.CultureInfo.InvariantCulture);
+
+
+            Income income = new Income(date, price, 0, "null", id);
+            monthlyIncome.Add(id, income);
+        }
+        dbConnection.Close();
     }
 }
