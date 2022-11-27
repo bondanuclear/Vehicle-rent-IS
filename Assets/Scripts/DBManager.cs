@@ -11,7 +11,10 @@ public class DBManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // string date = Maintenance.InvertDate(DateTime.Today);
+        // Debug.Log(date + " DATE ");
+        // Maintenance maintenance = new Maintenance(date, 35.5f, 12.7f, 0, 32);
+        // AddToMaintenanceTable(maintenance);
         // IDbConnection dbConnection = CreateAndOpenDatabase();
         // dbConnection.Close();
     }
@@ -116,7 +119,7 @@ public class DBManager : MonoBehaviour
             var hoursToCharge = dataReader.GetFloat(5);
             //Debug.Log(rentedHours + "client rentedHours ");
             Details details = new Details(id, vehicleID, maxDistance, batteryWatt, averageSpeed, hoursToCharge);
-            dict.Add(id, details);
+            dict.Add(vehicleID, details);
         }
         dbConnection.Close();
     }
@@ -140,7 +143,7 @@ public class DBManager : MonoBehaviour
     {
         IDbConnection dbConnection = CreateAndOpenDatabase();
         IDbCommand command = dbConnection.CreateCommand();
-        command.CommandText = $"UPDATE Vehicles SET amount = {vehicle.totalMileage} where vehicleID = {vehicle.vehicleID}";
+        command.CommandText = $"UPDATE Vehicles SET totalMileage = {vehicle.totalMileage} where vehicleID = {vehicle.vehicleID}";
         try
         {
             command.ExecuteNonQuery();
@@ -197,13 +200,10 @@ public class DBManager : MonoBehaviour
     {
         IDbConnection dbConnection = CreateAndOpenDatabase();
         IDbCommand command = dbConnection.CreateCommand();
-        //SqliteCommand insertSQL = new SqliteCommand("INSERT INTO Clients (clientID, Firstname, Surname, PhoneNumber) VALUES (35, 'ss', 'sss', '380994455')");
-        command.CommandText = $"INSERT INTO Maintenance_DAY(date, powerChargeCost, mechService, vehicleID, mileage) VALUES ('{maintenance.date}' , {maintenance.powerChargeCost}, {maintenance.mechServiceCost}, {maintenance.vehicleID}, {maintenance.mileage})";
-        //"INSERT OR REPLACE INTO HitCountTableSimple (id, hits) VALUES (0, " + hitCount + ")"; // 10
-        // command.Parameters.Add('3');
-        // command.Parameters.Add(client.firstName);
-        // command.Parameters.Add(client.surname);
-        // command.Parameters.Add(client.phoneNumber);
+        string powerCharge = maintenance.powerChargeCost.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        string mechService = maintenance.mechServiceCost.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        Debug.Log(maintenance.date + " " + maintenance.powerChargeCost + " " + maintenance.mechServiceCost);
+        command.CommandText = $"INSERT INTO Maintenance_DAY(date, powerChargeCost, mechService, vehicleID, mileage) VALUES ('{maintenance.date}' , '{powerCharge}', '{mechService}' , {maintenance.vehicleID}, '{maintenance.mileage}')";
         try
         {
             command.ExecuteNonQuery();
@@ -213,5 +213,88 @@ public class DBManager : MonoBehaviour
             throw new Exception(ex.Message);
         }
         dbConnection.Close();
+    }
+    public void AddToIncomeTable(Income income)
+    {
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand command = dbConnection.CreateCommand();
+        command.CommandText = $"INSERT INTO IncomeMov(date, price, hours, vehicleName) VALUES ('{income.date}', '{income.price}' , {income.hours}, '{income.vehicleName}')";
+        try
+        {
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        dbConnection.Close();
+    }
+    public void AddToRelativeIncomeTable(Income income)
+    {
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand command = dbConnection.CreateCommand();
+        command.CommandText = $"INSERT INTO RelativeIncome(date, relativeIncome) VALUES ('{income.date}', '{income.price}')";
+        try
+        {
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        dbConnection.Close();
+    }
+    public void AddToMonthRelativeIncomeTable(Income income)
+    {
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand command = dbConnection.CreateCommand();
+        string incomePrice = income.price.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        command.CommandText = $"INSERT INTO MonthRelativeIncome(date, monthIncome) VALUES ('{income.date}', '{incomePrice}')";
+        try
+        {
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        dbConnection.Close();
+    }
+    public void UpdateMonthIncome(Income income)
+    {
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand command = dbConnection.CreateCommand();
+        string incomePrice = income.price.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        command.CommandText = $"UPDATE MonthRelativeIncome SET monthIncome = '{incomePrice}' where mIncomeID = {income.incomeID}";
+        try
+        {
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        dbConnection.Close();
+    }
+    public Income GetLastIncomeRow()
+    {
+        Income income = null;
+        IDbConnection dbConnection = CreateAndOpenDatabase();
+        IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
+        dbCommandReadValues.CommandText = "SELECT * FROM MonthRelativeIncome ORDER BY mIncomeID DESC LIMIT 1;";
+        IDataReader dataReader = dbCommandReadValues.ExecuteReader();
+        while (dataReader.Read())
+        {
+            var id = dataReader.GetInt32(0);
+            Debug.Log(id + "income ID ");
+            var date = dataReader.GetString(1);
+            Debug.Log(date + " date ");
+            var stringPrice = dataReader.GetString(2);
+            Debug.Log(stringPrice + " price ");
+            float price = (float) double.Parse(stringPrice, System.Globalization.CultureInfo.InvariantCulture);
+            income = new Income(date, price, 0, "null", id);
+        }
+        dbConnection.Close();
+        return income;
     }
 }

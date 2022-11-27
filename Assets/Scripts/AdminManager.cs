@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 public class AdminManager : MonoBehaviour
@@ -8,13 +10,39 @@ public class AdminManager : MonoBehaviour
     ClientForm clientForm;
     DetailsManager detailsManager;
     DBManager dBManager;
+    IncomeManager incomeManager;
     private void Awake() {
         clientForm = GetComponent<ClientForm>();
         userInfo = GetComponent<UserInfo>();
         detailsManager = GetComponent<DetailsManager>();
         dBManager = FindObjectOfType<DBManager>();
+        incomeManager = GetComponent<IncomeManager>();
     }
+    private void Start() {
+       // Income income = dBManager.GetLastIncomeRow();
+       // Debug.Log("income " + income.price);
+        //dBManager.UpdateMonthIncome(new Income(Maintenance.InvertDate(System.DateTime.Today), 600.456f, 0, "null", income.incomeID));
+//         float a = 5.31f;
+//         double b = Convert.ToDouble("123,423");
+//         string txt = a.ToString(System.Globalization.CultureInfo.InvariantCulture);
+//         Debug.Log("txt = " + txt);
+//         double a2 = double.Parse(txt, System.Globalization.CultureInfo.InvariantCulture);
+//         Debug.Log("a2 = " + a2);
+//         System.IFormatProvider cultureUS =
+//    new System.Globalization.CultureInfo("en-US");
 
+//         System.Globalization.CultureInfo cultureFr =
+//            new System.Globalization.CultureInfo("fr-fr");
+
+//         //...
+
+//         double duration = double.Parse("0.125", cultureUS);
+//         double length = double.Parse("25,1415", cultureFr);
+//         Debug.Log("duration " + duration);
+//         Debug.Log("Length " + length);
+        //Debug.Log(float.Parse("3,4444", CultureInfo.InvariantCulture.NumberFormat));
+        
+    }
     public void CloseUserInfo()
     {
         userInfo.ProcessUserInfo(false);
@@ -28,16 +56,21 @@ public class AdminManager : MonoBehaviour
         CloseUserInfo();
         yield return null;
         Vehicle vehicle = clientForm.DeleteClient();
-        //Debug.Log(vehicle.vehicleID + " " + vehicle.vehicleName + " " + vehicle.type);
+        Debug.Log(vehicle.vehicleID + " " + vehicle.vehicleName + " " + vehicle.type);
         yield return null;
         // calculate maintenance using vehicle id and details table
+        
         Maintenance maintenance = detailsManager.CalculateMaintenance(vehicle);
         dBManager.AddToMaintenanceTable(maintenance);
-        // update mileage
+       
         yield return null;
-        // float totalMileage = vehicle.totalMileage + maintenance.mileage;
-        // dBManager.UpdateVehicleMileage()
-        // insert into maintenance table date + calculated values
+        incomeManager.AddIncomeMovTable(vehicle);
+        yield return null;
+        incomeManager.AddRelativeIncomeTable(maintenance);
+        yield return null;
+        incomeManager.AddMonthRelativeTable();
+        // insert into income table and relative income table
+        // insert data into month income table
     }
     
 

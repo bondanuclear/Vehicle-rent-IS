@@ -11,6 +11,8 @@ public class UserInfo : MonoBehaviour
     [SerializeField] TextMeshProUGUI hoursText;
     [SerializeField] TextMeshProUGUI vehicleNameText;
     [SerializeField] TextMeshProUGUI priceText;
+    public float totalPrice {get; private set; }= 0;
+    public int rentedHours{get; private set;} = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,8 +43,10 @@ public class UserInfo : MonoBehaviour
         nameText.text = $"Name: {client.firstName}";
         surnameText.text = $"Surname: {client.surname}";
         phoneNumberText.text = $"Phone number: {client.phoneNumber}";
-        hoursText.text = $"Hours rented: {client.rentedHours}";
+        rentedHours = client.rentedHours;
+        hoursText.text = $"Hours rented: {rentedHours}";
         vehicleNameText.text = $"Vehicle: {vehicle.vehicleName}";
-        priceText.text = $"Price: {PersistentData.instance.CalculateFullPrice(vehicle.vehicleID, client.rentedHours)}";
+        totalPrice = PersistentData.instance.CalculateFullPrice(vehicle.vehicleID, client.rentedHours);
+        priceText.text = $"Price: {totalPrice}";
     }
 }

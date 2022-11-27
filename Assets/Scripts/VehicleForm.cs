@@ -87,6 +87,7 @@ public class VehicleForm : MonoBehaviour
     private void ChangeVehiclePanel(Vehicle vehicle)
     {
         GameObject objectToChange = parent.transform.Find(vehicle.vehicleID + "Vehicle").gameObject;
+        
         objectToChange.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = vehicle.amount.ToString(); 
     }
 

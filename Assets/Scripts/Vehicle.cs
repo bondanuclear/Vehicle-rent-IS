@@ -31,6 +31,7 @@ public class Vehicle
     }
     public int IncreaseVehicleAmount()
     {
-        return ++amount;
+        amount += 1;
+        return amount;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,4 +21,8 @@ public class Maintenance
         this.mileage = mileage;
         this.vehicleID = vehicleID;
     }
+   public static string InvertDate(DateTime date)
+   {
+        return $"{date.Day}-{date.Month}-{date.Year}";
+   }
 }

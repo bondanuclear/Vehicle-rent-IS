@@ -87,12 +87,12 @@ public class ClientForm : MonoBehaviour
     {
         // maybe needs refactoring, but at least it works for now
         int finalAmount = vehicle.IncreaseVehicleAmount();
-        //Debug.Log(finalAmount + " FINAL AMOUNT ");
+        Debug.Log(finalAmount + " FINAL AMOUNT ");
         Vehicle updatedVehicle = new Vehicle(vehicle.vehicleID, vehicle.vehicleName, 
         vehicle.pricePerHour, vehicle.type, vehicle.totalMileage, finalAmount);
         dBManager.UpdateVehicleAmount(updatedVehicle);
         PersistentData.instance.vehiclesInfo[vehicle.vehicleID] = updatedVehicle;
-        //Debug.Log(PersistentData.instance.vehiclesInfo[vehicle.vehicleID].amount + " UPDATED ");
+        Debug.Log(PersistentData.instance.vehiclesInfo[vehicle.vehicleID].amount + " UPDATED ");
     }
     // можливо колись знадобиться
     private void AddClientPanel()
