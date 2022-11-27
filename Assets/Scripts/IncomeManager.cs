@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class IncomeManager : MonoBehaviour
@@ -8,13 +10,65 @@ public class IncomeManager : MonoBehaviour
     DBManager dBManager;
     UserInfo user;
     float relativeIncome = 0;
+    [SerializeField] GameObject parentDailyIncome;
+    [SerializeField] GameObject parentMonthlyIncome;
+    [SerializeField] GameObject dailyIncomePanel;
+    [SerializeField] GameObject monthlyIncomePanel;
     // Start is called before the first frame update
     void Awake()
     {
         user = GetComponent<UserInfo>();
         dBManager = FindObjectOfType<DBManager>();
     }
+    private void Start() {
+        SpawnMonthlyIncomePanels();
+         SpawnDailyIncomePanels();
+    }
 
+    private void SpawnMonthlyIncomePanels()
+    {
+        if (PersistentData.instance.monthlyIncome == null) return;
+        //hasSpawned = true;
+        
+        foreach (var item in PersistentData.instance.monthlyIncome)
+        {
+
+            GameObject spawnedObject = Instantiate(monthlyIncomePanel, parentMonthlyIncome.transform);
+           
+            spawnedObject.name = item.Key.ToString() + "MIncome";
+            spawnedObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "ID: " + item.Value.incomeID.ToString();
+            spawnedObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.Value.date;
+            spawnedObject.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Monthly income: " + item.Value.price.ToString();
+            
+            // Debug.Log(spawnedObject.name);
+            // Debug.Log(item.Key + " VEHICLE ID ");
+            
+
+        }
+    }
+    private void SpawnDailyIncomePanels()
+    {
+        if (PersistentData.instance.dailyIncome == null) return;
+        //hasSpawned = true;
+        int index = 0;
+        foreach (var item in PersistentData.instance.dailyIncome)
+        {
+            
+            GameObject spawnedObject = Instantiate(dailyIncomePanel, parentDailyIncome.transform);
+            float relativeIncome = PersistentData.instance.dailyRelativeIncome.ElementAt(index).Value.price;
+            spawnedObject.name = item.Key.ToString() + "Income";
+            spawnedObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.Value.date;
+            spawnedObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.Value.price.ToString();
+            spawnedObject.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = relativeIncome.ToString();
+            spawnedObject.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = item.Value.hours.ToString();
+            spawnedObject.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = item.Value.vehicleName;
+            // Debug.Log(spawnedObject.name);
+            // Debug.Log(item.Key + " VEHICLE ID ");
+            index++;
+
+        }
+    }
+    
     public void AddIncomeMovTable(Vehicle vehicle)
     {
          
@@ -36,6 +90,18 @@ public class IncomeManager : MonoBehaviour
         Income income1 = dBManager.GetLastIncomeRow("RelativeIncome", "rIncomeID");
         Debug.LogWarning("income1 " + income1.incomeID + " " + income.price);
         PersistentData.instance.dailyRelativeIncome.Add(income1.incomeID, income1);
+
+    }
+    public void SpawnPanel()
+    {
+        GameObject objectToSpawn = Instantiate(dailyIncomePanel, parentDailyIncome.transform);
+        Income relativeIncome = PersistentData.instance.dailyRelativeIncome.Values.Last();
+        Income pureIncome = PersistentData.instance.dailyIncome.Values.Last();
+        objectToSpawn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = pureIncome.date;
+        objectToSpawn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = pureIncome.price.ToString();
+        objectToSpawn.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = relativeIncome.price.ToString();
+        objectToSpawn.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = pureIncome.hours.ToString();
+        objectToSpawn.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = pureIncome.vehicleName;
     }
     public void AddMonthRelativeTable()
     {
@@ -57,8 +123,19 @@ public class IncomeManager : MonoBehaviour
             dBManager.AddToMonthRelativeIncomeTable(new Income(Maintenance.InvertDate(System.DateTime.Today), relativeIncome, 0, "null"));
             Income lastIncome1 = dBManager.GetLastIncomeRow("MonthRelativeIncome", "mIncomeID");
             PersistentData.instance.monthlyIncome.Add(lastIncome1.incomeID, lastIncome1);
+            SpawnMonthlyIncomePanel();
         }
 
+    }
+    public void SpawnMonthlyIncomePanel()
+    {
+        GameObject objectToSpawn = Instantiate(dailyIncomePanel, parentDailyIncome.transform);
+        Income relativeMonthlyIncome = PersistentData.instance.monthlyIncome.Values.Last();
+        
+        objectToSpawn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = relativeMonthlyIncome.incomeID.ToString();
+        objectToSpawn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = relativeMonthlyIncome.date;
+        objectToSpawn.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = relativeMonthlyIncome.price.ToString();
+       
     }
     private string GetLastIncomeMonth(string stringToSplit)
     {

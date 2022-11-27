@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AdminManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class AdminManager : MonoBehaviour
     DetailsManager detailsManager;
     DBManager dBManager;
     IncomeManager incomeManager;
+    [SerializeField] GameObject[] parents;
+    [SerializeField] ScrollRect scrollRect;
     private void Awake() {
         clientForm = GetComponent<ClientForm>();
         userInfo = GetComponent<UserInfo>();
@@ -65,13 +68,33 @@ public class AdminManager : MonoBehaviour
        
         yield return null;
         incomeManager.AddIncomeMovTable(vehicle);
-        yield return null;
         incomeManager.AddRelativeIncomeTable(maintenance);
+        incomeManager.SpawnPanel();
         yield return null;
         incomeManager.AddMonthRelativeTable();
         // insert into income table and relative income table
         // insert data into month income table
     }
     
-
+    private void TurnOffContents()
+    {
+        foreach(var item in parents)
+        {
+            item.SetActive(false);
+        }
+    }
+    public void ShowClients(int index)
+    {
+        TurnOffContents();
+        clientForm.SpawnClientPanels();
+        parents[index].SetActive(true);
+        scrollRect.content = parents[index].GetComponent<RectTransform>();
+    }
+    public void TurnContentOn(int index)
+    {
+        TurnOffContents();
+        clientForm.SetClientIDNull();
+        parents[index].SetActive(true);
+        scrollRect.content = parents[index].GetComponent<RectTransform>();
+    }
 }

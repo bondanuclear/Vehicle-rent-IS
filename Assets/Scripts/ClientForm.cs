@@ -19,6 +19,10 @@ public class ClientForm : MonoBehaviour
         dBManager = FindObjectOfType<DBManager>();
         
     }
+    public void SetClientIDNull()
+    {
+        clientIDHelper = null;
+    }
     public void SpawnClientPanels()
     {
         if(hasSpawned) return;
