@@ -38,10 +38,13 @@ public class DetailsManager : MonoBehaviour
         Details details;
         string date = Maintenance.InvertDate(DateTime.Today);
         PersistentData.instance.vehicleDetails.TryGetValue(vehicle.vehicleID, out details);
+        // 5 - min distance
         int clientDistance = UnityEngine.Random.Range(5, details.maxDistance);
         //Debug.Log(clientDistance + " client distance");
         //Debug.Log(details.averageSpeed + " average speed" + details.batteryWatt / 1000);
-        float priceForCharging = ((clientDistance/details.averageSpeed) * (details.batteryWatt) * kWattPerHour) / 1000;
+        float percentageOfMaxDistance = Mathf.InverseLerp(0, clientDistance, details.maxDistance);
+        float hoursToChargeValue = Mathf.Lerp(0, details.hoursToCharge, percentageOfMaxDistance);
+        float priceForCharging = (hoursToChargeValue * (details.batteryWatt) * kWattPerHour) / 1000;
         //Debug.Log(priceForCharging + " PRICE for charging");
         // calculate mech service price
         float mechServiceCost = CalculateMechService(vehicle, clientDistance);

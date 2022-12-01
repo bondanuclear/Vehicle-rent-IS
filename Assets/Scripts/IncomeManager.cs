@@ -84,11 +84,11 @@ public class IncomeManager : MonoBehaviour
     public void AddRelativeIncomeTable(Maintenance maintenance)
     {
         relativeIncome = user.totalPrice - (maintenance.powerChargeCost + maintenance.mechServiceCost);
-        Debug.Log("RELATIVE INCOME " + relativeIncome );
+        //Debug.Log("RELATIVE INCOME " + relativeIncome );
         Income income = new Income(Maintenance.InvertDate(System.DateTime.Today), relativeIncome, 0, "null");
         dBManager.AddToRelativeIncomeTable(income);
         Income income1 = dBManager.GetLastIncomeRow("RelativeIncome", "rIncomeID");
-        Debug.LogWarning("income1 " + income1.incomeID + " " + income.price);
+        //Debug.LogWarning("income1 " + income1.incomeID + " " + income.price);
         PersistentData.instance.dailyRelativeIncome.Add(income1.incomeID, income1);
 
     }
@@ -107,17 +107,24 @@ public class IncomeManager : MonoBehaviour
     {
         // check the month of last income in month relative table
         Income lastIncome = dBManager.GetLastIncomeRow("MonthRelativeIncome", "mIncomeID");
-        Debug.Log(lastIncome.incomeID + " income ID in INCOME MANAGER");
+        //Debug.Log(lastIncome.incomeID + " income ID in INCOME MANAGER");
         string todayDate = Maintenance.InvertDate(System.DateTime.Today);
         string lastIncomeMonth = GetLastIncomeMonth(lastIncome.date);
         Debug.Log("Last month is " + lastIncomeMonth);
         
         if(System.DateTime.Today.Month == Convert.ToInt32(lastIncomeMonth))
         {
+           
+
             float updatedPrice = lastIncome.price + relativeIncome;
+           
             dBManager.UpdateMonthIncome(new Income("", updatedPrice, 0, "null", lastIncome.incomeID));
-            PersistentData.instance.monthlyIncome[lastIncome.incomeID] = new Income(
+            Income updt = new Income(
                 lastIncome.date, updatedPrice, 0, "null", lastIncome.incomeID);
+           
+            PersistentData.instance.monthlyIncome[lastIncome.incomeID] = updt;
+            GameObject objectToChange = parentMonthlyIncome.transform.Find(updt.incomeID+"MIncome").gameObject;
+            objectToChange.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = updatedPrice.ToString() + " UAH ";
         } else 
         {
             dBManager.AddToMonthRelativeIncomeTable(new Income(Maintenance.InvertDate(System.DateTime.Today), relativeIncome, 0, "null"));
